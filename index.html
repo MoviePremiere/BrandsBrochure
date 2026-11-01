@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Fast Cinema | Movie Premiere with Brands</title>
+  <meta name="description" content="Fast Cinema: a 30-minute movie premiere for Nashik's school students. Let your brand walk the red carpet.">
+  <link rel="preload" as="image" href="splash.jpg">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #000; }
+    body { -webkit-text-size-adjust: 100%; }
+
+    /* ---------- Pages ---------- */
+    main { display: block; background: #000; }
+    .page {
+      display: flex;
+      justify-content: center;   /* black bars on the sides */
+      align-items: center;
+      background: #000;
+    }
+    .page img {
+      display: block;
+      width: 100%;               /* phones / portrait: fill the width */
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Landscape screens (laptop, TV, tablet sideways, desktop):
+       fit one full page to the screen height, centred, black on both sides */
+    @media (min-aspect-ratio: 1/1) {
+      html { scroll-snap-type: y mandatory; }
+      .page { height: 100vh; height: 100dvh; scroll-snap-align: start; }
+      .page img { width: auto; height: 100%; max-width: 100%; object-fit: contain; }
+    }
+
+    /* Tablets / small windows in portrait: don't let the page get huge */
+    @media (min-width: 900px) and (max-aspect-ratio: 1/1) {
+      .page img { max-width: 900px; }
+    }
+
+    /* ---------- Splash ---------- */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000 url("splash.jpg") center / contain no-repeat;
+      opacity: 1;
+      transition: opacity 1.2s ease;
+      cursor: pointer;
+    }
+    #splash.hide { opacity: 0; pointer-events: none; }
+    body.loading { overflow: hidden; }
+
+    @media (prefers-reduced-motion: reduce) {
+      #splash { transition-duration: .01s; }
+    }
+  </style>
+</head>
+<body class="loading">
+  <div id="splash" role="img" aria-label="Fast Cinema - Movie Premiere with Brands"></div>
+
+  <main>
+    <section class="page">
+      <img src="page1.jpg" alt="Fast Cinema brochure, page 1: Let your brand walk the red carpet" decoding="async">
+    </section>
+    <section class="page">
+      <img src="page2.jpg" alt="Fast Cinema brochure, page 2" loading="lazy" decoding="async">
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var splash = document.getElementById("splash");
+      var done = false;
+      function hideSplash() {
+        if (done) return;
+        done = true;
+        splash.classList.add("hide");
+        document.body.classList.remove("loading");
+        setTimeout(function () { splash.remove(); }, 1400);
+      }
+      window.addEventListener("load", function () {
+        setTimeout(hideSplash, 2000);   // how long the logo stays (ms)
+      });
+      splash.addEventListener("click", hideSplash);  // tap to skip
+      setTimeout(hideSplash, 6000);     // safety net on slow connections
+    })();
+  </script>
+</body>
+</html>
